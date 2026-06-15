@@ -34,7 +34,7 @@ async function signUp() {
 </script>
 
 <template>
-  <main class="screen" style="align-items:center;justify-content:center;min-height:100dvh">
+  <main class="screen" style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100dvh">
     <div style="width:100%;max-width:380px">
       <!-- Brand -->
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:28px">
