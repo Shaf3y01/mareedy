@@ -26,5 +26,5 @@ export default {
   bedAvailable: 'هذا السرير متاح.',
   signIn: 'تسجيل الدخول', signOut: 'تسجيل الخروج', createAccount: 'إنشاء حساب',
   accountCreated: 'تم إنشاء الحساب — يمكنك تسجيل الدخول الآن.',
-  email: 'البريد الإلكتروني', emailPlaceholder: 'you@clinic.org', password: 'كلمة المرور',
+  email: 'البريد الإلكتروني', emailPlaceholder: "you{'@'}clinic.org", password: 'كلمة المرور',
 }
