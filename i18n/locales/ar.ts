@@ -1,0 +1,30 @@
+// Arabic UI strings. Lazy-loaded by @nuxtjs/i18n (see nuxt.config.ts).
+// NOTE: this is a working scaffold to prove RTL. Have the clinical terms
+// reviewed by a clinician / professional medical translator before real use.
+export default {
+  sub: 'قسم الرعاية الحرجة', ward: 'القسم', overview: 'نظرة عامة على الأسرّة',
+  beds: 'سرير', occupied: 'مشغول', available: 'متاح', free: 'متاح',
+  admit: 'إدخال مريض', addBed: 'إضافة سرير', discharge: 'تخريج',
+  edit: 'تعديل', save: 'حفظ', cancel: 'إلغاء', add: 'إضافة', back: 'كل الأسرّة',
+  bed: 'سرير', yrs: 'سنة', male: 'ذكر', female: 'أنثى',
+  tabChart: 'الملف', tabExam: 'الفحص', tabLabs: 'التحاليل', tabImaging: 'الأشعة', tabMeds: 'الأدوية', tabEvents: 'الأحداث',
+  attributes: 'بيانات المريض', complaint: 'الشكوى والعلامات الحيوية',
+  name: 'الاسم', age: 'العمر', sex: 'الجنس', pmhx: 'التاريخ المرضي', allergies: 'الحساسية', habits: 'العادات',
+  conscious: 'مستوى الوعي', bp: 'ضغط الدم', hr: 'النبض', spo2: 'تشبع الأكسجين', o2: 'دعم الأكسجين', temp: 'الحرارة', rr: 'معدل التنفس',
+  exam: 'النتائج السريرية', appearance: 'المظهر العام', cvs: 'القلب والأوعية', chest: 'الصدر',
+  abdomen: 'البطن', limbs: 'الأطراف (علوية / سفلية)', neuro: 'الجهاز العصبي',
+  ctChest: 'أشعة مقطعية للصدر', ctBrain: 'أشعة مقطعية للمخ', xray: 'أشعة سينية', paus: 'أشعة تلفزيونية على البطن والحوض',
+  ultrasound: 'الموجات فوق الصوتية', endoscopy: 'المنظار',
+  abg: 'غازات الدم', cbc: 'صورة دم كاملة', renal: 'وظائف الكلى', lytes: 'الأملاح', liverg: 'وظائف الكبد',
+  bilig: 'البيليروبين', coag: 'التجلط / الالتهاب', cardiac: 'القلب', thyroidg: 'الغدة الدرقية', metab: 'الأيض', urine: 'إدرار البول',
+  balance: 'المحصلة', meds: 'الأدوية', noMeds: 'لا توجد أدوية مسجلة.',
+  addMed: 'إضافة دواء', dose: 'الجرعة', route: 'الطريق', freq: 'التكرار', started: 'بدأ',
+  discont: 'إيقاف', modify: 'تعديل', escalate: 'تصعيد', deesc: 'تخفيف',
+  events: 'الأحداث', recs: 'التوصيات', addEvent: 'أضف حدثاً…', noEvents: 'لا توجد أحداث مسجلة بعد.',
+  chiefC: 'الشكوى الرئيسية', acuity: 'درجة الخطورة', stable: 'مستقر', watch: 'تحت الملاحظة', critical: 'حرج',
+  confirmDisc: 'تخريج هذا المريض وإخلاء السرير؟', yes: 'تأكيد', empty: '—',
+  bedAvailable: 'هذا السرير متاح.',
+  signIn: 'تسجيل الدخول', signOut: 'تسجيل الخروج', createAccount: 'إنشاء حساب',
+  accountCreated: 'تم إنشاء الحساب — يمكنك تسجيل الدخول الآن.',
+  email: 'البريد الإلكتروني', emailPlaceholder: 'you@clinic.org', password: 'كلمة المرور',
+}
