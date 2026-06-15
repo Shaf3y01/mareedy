@@ -136,19 +136,24 @@ export const useWardStore = defineStore('ward', () => {
 
   async function loadWard() {
     loading.value = true
-    const [{ data: bedRows }, { data: patRows }] = await Promise.all([
-      supabase.from('beds').select('id').order('id'),
-      supabase
-        .from('patients')
-        .select('*, events(id, occurred_at, body), meds(id, name, dose, route, freq, started, status, log)')
-        .eq('discharged', false),
-    ])
-    const patMap = new Map<number, Patient>()
-    for (const row of patRows ?? []) {
-      patMap.set(row.bed_id, dbRowToPatient(row, row.events ?? [], row.meds ?? []))
+    try {
+      const [{ data: bedRows }, { data: patRows }] = await Promise.all([
+        supabase.from('beds').select('id').order('id'),
+        supabase
+          .from('patients')
+          .select('*, events(id, occurred_at, body), meds(id, name, dose, route, freq, started, status, log)')
+          .eq('discharged', false),
+      ])
+      const patMap = new Map<number, Patient>()
+      for (const row of patRows ?? []) {
+        patMap.set(row.bed_id, dbRowToPatient(row, row.events ?? [], row.meds ?? []))
+      }
+      beds.value = (bedRows ?? []).map(b => ({ id: b.id, patient: patMap.get(b.id) ?? null }))
+    } catch {
+      // Supabase unavailable (no session, no network, missing env) — start with empty ward.
+    } finally {
+      loading.value = false
     }
-    beds.value = (bedRows ?? []).map(b => ({ id: b.id, patient: patMap.get(b.id) ?? null }))
-    loading.value = false
   }
 
   async function admit(
