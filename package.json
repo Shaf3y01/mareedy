@@ -1,0 +1,35 @@
+{
+  "name": "mareedy",
+  "version": "1.0.0",
+  "description": "A mobile-first bed & patient management app for a critical-care ward. Vue 3 + Nuxt 4, installable as a PWA, bilingual **English / Arabic** with full right-to-left support, minimum 9 beds.",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Shaf3y01/mareedy.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/Shaf3y01/mareedy/issues"
+  },
+  "homepage": "https://github.com/Shaf3y01/mareedy#readme",
+  "dependencies": {
+    "@nuxtjs/i18n": "^10.4.0",
+    "@nuxtjs/supabase": "^2.0.9",
+    "@pinia/nuxt": "^0.11.3",
+    "@supabase/supabase-js": "^2.108.2",
+    "nuxt": "^4.4.5",
+    "pinia": "^3.0.4"
+  },
+  "devDependencies": {
+    "@vite-pwa/nuxt": "^1.1.1",
+    "typescript": "^6.0.3"
+  }
+}
