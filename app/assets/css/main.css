@@ -250,7 +250,7 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
 .sheet-actions{display:flex;gap:10px;margin-top:20px}
 .sheet-actions .btn,.sheet-actions .btn-ghost{flex:1;justify-content:center}
 
-.add-bed{margin-top:16px;display:flex;justify-content:center}
+.add-bed{margin-top:16px;display:none;justify-content:center}
 .back{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--ink-2);cursor:pointer;background:none;border:none;font-family:inherit;padding:6px 0;margin-bottom:8px}
 .back:hover{color:var(--accent)}
 .back svg{width:16px;height:16px}
