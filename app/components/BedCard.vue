@@ -28,7 +28,10 @@ const padded = computed(() => String(props.bed.id).padStart(2, '0'))
 
     <!-- Occupied -->
     <div v-if="bed.patient" class="bed-body">
-      <div class="pname">{{ bed.patient.name }}</div>
+      <div class="pname">
+        {{ bed.patient.name }}
+        <span v-if="bed.patient.patientNo" style="font-size:11px;font-weight:500;opacity:0.6"># {{ bed.patient.patientNo }}</span>
+      </div>
       <div class="pmeta">
         {{ bed.patient.age }} {{ t('yrs') }} ·
         {{ bed.patient.sex === 'F' ? t('female') : t('male') }}
