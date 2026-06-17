@@ -14,6 +14,7 @@ export interface WardEvent { date: string; text: string }
 export interface Patient {
   id: string
   admittedAt: string
+  patientNo: string
   name: string; age: string; sex: string
   pmhx: string; allergies: string; habits: string
   chartDate: string
@@ -46,6 +47,7 @@ export function blankPatient(over: Partial<Patient> = {}): Patient {
   return {
     id: uid(),
     admittedAt: '',
+    patientNo: '',
     name: '', age: '', sex: 'F', pmhx: '', allergies: '', habits: '',
     chartDate: '',
     conscious: '', bp: '', hr: '', spo2: '', o2mode: 'Room Air', temp: '', rr: '',
@@ -81,6 +83,7 @@ function dbRowToPatient(row: Record<string, any>, events: any[], meds: any[]): P
   return {
     id: row.id,
     admittedAt: row.admitted_at ? isoToLocalInput(row.admitted_at) : '',
+    patientNo: row.patient_no ?? '',
     name: row.name ?? '', age: row.age ?? '', sex: row.sex ?? 'F',
     pmhx: row.pmhx ?? '', allergies: row.allergies ?? '', habits: row.habits ?? '',
     chartDate: row.chart_date ? fmtDbTimestamp(row.chart_date) : '',
@@ -113,6 +116,7 @@ function dbRowToPatient(row: Record<string, any>, events: any[], meds: any[]): P
 
 function patientToDbRow(p: Patient) {
   return {
+    patient_no: p.patientNo,
     name: p.name, age: p.age, sex: p.sex,
     pmhx: p.pmhx, allergies: p.allergies, habits: p.habits,
     admitted_at: p.admittedAt ? new Date(p.admittedAt).toISOString() : null,

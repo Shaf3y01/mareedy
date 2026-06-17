@@ -17,6 +17,7 @@ create table if not exists beds (
 create table if not exists patients (
   id              uuid primary key default gen_random_uuid(),
   bed_id          int references beds (id),         -- current bed (null once discharged)
+  patient_no      text default '',
   name            text not null default '',
   age             text default '',
   sex             text default 'F',

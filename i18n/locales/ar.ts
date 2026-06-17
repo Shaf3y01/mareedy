@@ -9,6 +9,7 @@ export default {
   bed: 'سرير', yrs: 'سنة', male: 'ذكر', female: 'أنثى',
   tabChart: 'الملف', tabExam: 'الفحص', tabLabs: 'التحاليل', tabImaging: 'الأشعة', tabMeds: 'الأدوية', tabEvents: 'الأحداث',
   attributes: 'بيانات المريض', complaint: 'الشكوى والعلامات الحيوية',
+  patientNo: 'رقم المريض', patientNoPlaceholder: 'مثال: 123456',
   name: 'الاسم', age: 'العمر', sex: 'الجنس', pmhx: 'التاريخ المرضي', allergies: 'الحساسية', habits: 'العادات',
   conscious: 'مستوى الوعي', bp: 'ضغط الدم', hr: 'النبض', spo2: 'تشبع الأكسجين', o2: 'دعم الأكسجين', temp: 'الحرارة', rr: 'معدل التنفس',
   exam: 'النتائج السريرية', appearance: 'المظهر العام', cvs: 'القلب والأوعية', chest: 'الصدر',

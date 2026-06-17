@@ -7,6 +7,7 @@ export default {
   bed: 'Bed', yrs: 'yrs', male: 'M', female: 'F',
   tabChart: 'Chart', tabExam: 'Exam', tabLabs: 'Labs', tabImaging: 'Imaging', tabMeds: 'Meds', tabEvents: 'Events',
   attributes: 'Patient details', complaint: 'Complaint & vitals',
+  patientNo: 'Patient No.', patientNoPlaceholder: 'e.g. 123456',
   name: 'Name', age: 'Age', sex: 'Sex', pmhx: 'Relevant PMHx', allergies: 'Allergies', habits: 'Special habits',
   conscious: 'Conscious level', bp: 'BP', hr: 'HR', spo2: 'SpO₂', o2: 'O₂ support', temp: 'Temp', rr: 'RR',
   exam: 'Clinical findings', appearance: 'Appearance', cvs: 'Cardiovascular', chest: 'Chest',
