@@ -31,8 +31,12 @@ const padded = computed(() => String(props.bedId).padStart(2, '0'))
       <div class="phead-id">
         <div class="nm">
           {{ patient.name }}
-          <span v-if="patient.patientNo" class="bed-tag" style="font-size:12px;font-weight:500"># {{ patient.patientNo }}</span>
+          <span v-if="patient.patientNo && !editing" class="bed-tag" style="font-size:12px;font-weight:500"># {{ patient.patientNo }}</span>
           <StatusPill :status="patient.status" />
+        </div>
+        <div v-if="editing" style="display:flex;align-items:center;gap:6px;margin-top:4px">
+          <span style="font-size:12px;color:var(--ink-3);white-space:nowrap">{{ t('patientNo') }}</span>
+          <input v-model="patient.patientNo" class="in mono" style="max-width:140px;font-size:13px" :placeholder="t('patientNoPlaceholder')" />
         </div>
         <div class="mt">
           <span class="bed-tag">{{ t('bed') }} {{ padded }}</span>
