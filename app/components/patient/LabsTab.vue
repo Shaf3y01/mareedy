@@ -29,6 +29,14 @@ const groups = computed<Group[]>(() => {
   <div class="panels">
     <div class="panel">
       <h3>{{ t('tabLabs') }}</h3>
+      <div class="field" style="margin-bottom:8px">
+        <div class="k">{{ t('labsDate') }}</div>
+        <input v-if="editing" v-model="patient.labsDate" class="in mono" type="datetime-local" />
+        <div v-else class="v" :class="{ empty: !patient.labsDate }">
+          {{ patient.labsDate ? fmtDbTimestamp(new Date(patient.labsDate).toISOString()) : t('empty') }}
+        </div>
+      </div>
+
       <div class="panel-2">
         <div v-for="g in groups" :key="g.title" class="lab-group">
           <h4>{{ g.title }}</h4>

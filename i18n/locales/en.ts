@@ -11,7 +11,7 @@ export default {
   conscious: 'Conscious level', bp: 'BP', hr: 'HR', spo2: 'SpO₂', o2: 'O₂ support', temp: 'Temp', rr: 'RR',
   exam: 'Clinical findings', appearance: 'Appearance', cvs: 'Cardiovascular', chest: 'Chest',
   abdomen: 'Abdomen', limbs: 'Limbs (upper / lower)', neuro: 'Neuro',
-  imagingDate: 'Imaging date / time',
+  examDate: 'Exam date / time', labsDate: 'Labs date / time', imagingDate: 'Imaging date / time',
   ctChest: 'CT chest', ctBrain: 'CT brain', xray: 'X-ray', paus: 'Pelvi-abdominal US',
   ultrasound: 'Ultrasound', endoscopy: 'Endoscopy',
   abg: 'ABG', cbc: 'CBC', renal: 'Renal', lytes: 'Electrolytes', liverg: 'Liver',

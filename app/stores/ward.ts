@@ -18,7 +18,7 @@ export interface Patient {
   pmhx: string; allergies: string; habits: string
   conscious: string; bp: string; hr: string; spo2: string; o2mode: string; temp: string; rr: string
   status: Acuity
-  exam: { appearance: string; cvs: string; chest: string; abdomen: string; limbs: string; neuro: string }
+  exam: { appearance: string; cvs: string; chest: string; abdomen: string; limbs: string; neuro: string; examDate: string }
   imaging: { ctChest: string; ctBrain: string; xray: string; paus: string; imagingDate: string }
   ultrasound: string; endoscopy: string
   abg: { ph: string; co2: string; hco3: string; lactate: string }
@@ -27,7 +27,7 @@ export interface Patient {
   lytes: { na: string; k: string; ca: string }
   liver: { ast: string; alt: string; albumin: string }
   bili: { total: string; direct: string; indirect: string }
-  inr: string; crp: string
+  inr: string; crp: string; labsDate: string
   cardiac: { troponin: string; ckmb: string }
   thyroid: { tsh: string; ft3: string; ft4: string }
   hba1c: string
@@ -48,7 +48,7 @@ export function blankPatient(over: Partial<Patient> = {}): Patient {
     name: '', age: '', sex: 'F', pmhx: '', allergies: '', habits: '',
     conscious: '', bp: '', hr: '', spo2: '', o2mode: 'Room Air', temp: '', rr: '',
     status: 'stable',
-    exam: { appearance: '', cvs: '', chest: '', abdomen: '', limbs: '', neuro: '' },
+    exam: { appearance: '', cvs: '', chest: '', abdomen: '', limbs: '', neuro: '', examDate: '' },
     imaging: { ctChest: '', ctBrain: '', xray: '', paus: '', imagingDate: '' },
     ultrasound: '', endoscopy: '',
     abg: { ph: '', co2: '', hco3: '', lactate: '' },
@@ -57,7 +57,7 @@ export function blankPatient(over: Partial<Patient> = {}): Patient {
     lytes: { na: '', k: '', ca: '' },
     liver: { ast: '', alt: '', albumin: '' },
     bili: { total: '', direct: '', indirect: '' },
-    inr: '', crp: '',
+    inr: '', crp: '', labsDate: '',
     cardiac: { troponin: '', ckmb: '' },
     thyroid: { tsh: '', ft3: '', ft4: '' },
     hba1c: '',
@@ -93,7 +93,7 @@ function dbRowToPatient(row: Record<string, any>, events: any[], meds: any[]): P
     lytes: { ...b.lytes, ...(labs.lytes ?? {}) },
     liver: { ...b.liver, ...(labs.liver ?? {}) },
     bili: { ...b.bili, ...(labs.bili ?? {}) },
-    inr: labs.inr ?? '', crp: labs.crp ?? '',
+    inr: labs.inr ?? '', crp: labs.crp ?? '', labsDate: labs.labsDate ?? '',
     cardiac: { ...b.cardiac, ...(labs.cardiac ?? {}) },
     thyroid: { ...b.thyroid, ...(labs.thyroid ?? {}) },
     hba1c: labs.hba1c ?? '',
@@ -119,6 +119,7 @@ function patientToDbRow(p: Patient) {
       abg: p.abg, cbc: p.cbc, renal: p.renal, lytes: p.lytes,
       liver: p.liver, bili: p.bili, inr: p.inr, crp: p.crp,
       cardiac: p.cardiac, thyroid: p.thyroid, hba1c: p.hba1c,
+      labsDate: p.labsDate,
     },
     balance: p.balance, recommendations: p.recommendations,
     updated_at: new Date().toISOString(),
