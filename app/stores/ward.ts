@@ -171,7 +171,7 @@ export const useWardStore = defineStore('ward', () => {
 
   async function admit(
     bedId: number,
-    data: { name: string; age: string; sex: string; status: Acuity; complaint: string; admittedAt: string },
+    data: { patientNo: string; name: string; age: string; sex: string; status: Acuity; complaint: string; admittedAt: string },
   ) {
     const bed = bedById.value(bedId)
     if (!bed) return
@@ -179,7 +179,7 @@ export const useWardStore = defineStore('ward', () => {
     const admittedIso = data.admittedAt ? new Date(data.admittedAt).toISOString() : new Date().toISOString()
     const { data: row } = await supabase
       .from('patients')
-      .insert({ bed_id: bedId, name: data.name.trim(), age: data.age, sex: data.sex, status: data.status, admitted_at: admittedIso })
+      .insert({ bed_id: bedId, patient_no: data.patientNo, name: data.name.trim(), age: data.age, sex: data.sex, status: data.status, admitted_at: admittedIso })
       .select()
       .single()
     if (!row) return

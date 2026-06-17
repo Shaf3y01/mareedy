@@ -1,14 +1,14 @@
 <script setup lang="ts">
 const props = defineProps<{ bedId: number | null }>()
 const open = defineModel<boolean>('open', { default: false })
-const emit = defineEmits<{ confirm: [bedId: number, data: { name: string; age: string; sex: string; status: Acuity; complaint: string; admittedAt: string }] }>()
+const emit = defineEmits<{ confirm: [bedId: number, data: { patientNo: string; name: string; age: string; sex: string; status: Acuity; complaint: string; admittedAt: string }] }>()
 
 const { t } = useI18n()
 
-const draft = reactive({ name: '', age: '', sex: 'F', status: 'stable' as Acuity, complaint: '', admittedAt: localNow() })
+const draft = reactive({ patientNo: '', name: '', age: '', sex: 'F', status: 'stable' as Acuity, complaint: '', admittedAt: localNow() })
 
 watch(open, (v) => {
-  if (v) Object.assign(draft, { name: '', age: '', sex: 'F', status: 'stable', complaint: '', admittedAt: localNow() })
+  if (v) Object.assign(draft, { patientNo: '', name: '', age: '', sex: 'F', status: 'stable', complaint: '', admittedAt: localNow() })
 })
 
 const padded = computed(() => (props.bedId == null ? '' : String(props.bedId).padStart(2, '0')))
@@ -28,9 +28,15 @@ function confirm() {
         <div class="sub">{{ t('bed') }} {{ padded }}</div>
 
         <div class="form-grid">
-          <div>
-            <span class="lab">{{ t('name') }}</span>
-            <input v-model="draft.name" class="in" placeholder="…" />
+          <div class="form-row">
+            <div>
+              <span class="lab">{{ t('patientNo') }}</span>
+              <input v-model="draft.patientNo" class="in mono" :placeholder="t('patientNoPlaceholder')" />
+            </div>
+            <div style="flex:2">
+              <span class="lab">{{ t('name') }}</span>
+              <input v-model="draft.name" class="in" placeholder="…" />
+            </div>
           </div>
           <div class="form-row">
             <div>
