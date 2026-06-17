@@ -36,7 +36,7 @@ function onDischarge() {
         <div :key="tab">
           <ChartTab v-if="tab === 'chart'" :patient="patient" :editing="editing" />
           <ExamTab v-else-if="tab === 'exam'" :patient="patient" :editing="editing" />
-          <LabsTab v-else-if="tab === 'labs'" :patient="patient" :editing="editing" />
+          <LabsTab v-else-if="tab === 'labs'" :patient="patient" :bed-id="bedId" :editing="editing" />
           <ImagingTab v-else-if="tab === 'imaging'" :patient="patient" :editing="editing" />
           <MedsTab v-else-if="tab === 'meds'" :patient="patient" :bed-id="bedId" :editing="editing" />
           <EventsTab v-else-if="tab === 'events'" :patient="patient" :bed-id="bedId" :editing="editing" />

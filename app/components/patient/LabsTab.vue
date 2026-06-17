@@ -1,12 +1,22 @@
 <script setup lang="ts">
 import type { Patient, LabsSet } from '~/stores/ward'
+import { blankLabsSet } from '~/stores/ward'
 
-const props = defineProps<{ patient: Patient; editing: boolean }>()
+const props = defineProps<{ patient: Patient; bedId: number; editing: boolean }>()
 const { t } = useI18n()
+const ward = useWardStore()
 
 type SetKey = 'admission' | 'yesterday' | 'today'
 const activeSet = ref<SetKey>('today')
 const set = computed(() => props.patient.labsSets[activeSet.value])
+
+const armed = ref(false)
+function rollover() {
+  Object.assign(props.patient.labsSets.yesterday, props.patient.labsSets.today)
+  Object.assign(props.patient.labsSets.today, blankLabsSet())
+  armed.value = false
+  ward.savePatient(props.bedId)
+}
 
 type Row = [label: string, key: string, unit?: string]
 interface Group { title: string; obj: Record<string, string>; rows: Row[] }
@@ -33,13 +43,25 @@ const groups = computed<Group[]>(() => {
     <div class="panel">
       <h3>{{ t('tabLabs') }}</h3>
 
-      <!-- Sub-tabs -->
-      <div class="tabs" style="margin-bottom:12px">
-        <button
-          v-for="key in (['admission', 'yesterday', 'today'] as const)" :key="key"
-          type="button" class="tab" :class="{ active: activeSet === key }"
-          @click="activeSet = key"
-        >{{ t(`labs_${key}`) }}</button>
+      <!-- Sub-tabs + New Day button -->
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px;flex-wrap:wrap">
+        <div class="tabs" style="margin-bottom:0">
+          <button
+            v-for="key in (['admission', 'yesterday', 'today'] as const)" :key="key"
+            type="button" class="tab" :class="{ active: activeSet === key }"
+            @click="activeSet = key"
+          >{{ t(`labs_${key}`) }}</button>
+        </div>
+        <button class="btn-xs warn" type="button" @click="armed = true">{{ t('newDay') }}</button>
+      </div>
+
+      <!-- New Day confirmation -->
+      <div v-if="armed" style="background:var(--warn-soft,#fff8e1);border:1px solid #ffe082;border-radius:12px;padding:12px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
+        <span style="font-size:13.5px">{{ t('newDayConfirm') }}</span>
+        <span style="display:flex;gap:8px">
+          <button class="btn-ghost btn btn-sm" type="button" @click="armed = false">{{ t('cancel') }}</button>
+          <button class="btn btn-sm" type="button" @click="rollover">{{ t('yes') }}</button>
+        </span>
       </div>
 
       <!-- Date/time for this set -->

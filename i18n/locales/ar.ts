@@ -15,6 +15,7 @@ export default {
   exam: 'النتائج السريرية', appearance: 'المظهر العام', cvs: 'القلب والأوعية', chest: 'الصدر',
   abdomen: 'البطن', limbs: 'الأطراف (علوية / سفلية)', neuro: 'الجهاز العصبي',
   labs_admission: 'عند الإدخال', labs_yesterday: 'أمس', labs_today: 'اليوم',
+  newDay: 'يوم جديد', newDayConfirm: 'نسخ اليوم إلى أمس وحذف بيانات اليوم؟',
   chartDate: 'تاريخ ووقت العلامات الحيوية', examDate: 'تاريخ ووقت الفحص', labsDate: 'تاريخ ووقت التحاليل', imagingDate: 'تاريخ ووقت الأشعة',
   ctChest: 'أشعة مقطعية للصدر', ctBrain: 'أشعة مقطعية للمخ', xray: 'أشعة سينية', paus: 'أشعة تلفزيونية على البطن والحوض',
   ultrasound: 'الموجات فوق الصوتية', endoscopy: 'المنظار',
