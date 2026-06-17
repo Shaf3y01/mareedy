@@ -31,6 +31,7 @@ const padded = computed(() => String(props.bedId).padStart(2, '0'))
       <div class="phead-id">
         <div class="nm">
           {{ patient.name }}
+          <span v-if="patient.patientNo" class="bed-tag" style="font-size:12px;font-weight:500"># {{ patient.patientNo }}</span>
           <StatusPill :status="patient.status" />
         </div>
         <div class="mt">
