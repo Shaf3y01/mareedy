@@ -20,6 +20,7 @@ export default {
   discont: 'Discontinue', modify: 'Modify', escalate: 'Escalate', deesc: 'De-escalate',
   events: 'Events', recs: 'Recommendations', addEvent: 'Add an event…', noEvents: 'No events logged yet.',
   chiefC: 'Chief complaint', acuity: 'Acuity', stable: 'Stable', watch: 'Watch', critical: 'Critical',
+  admittedAt: 'Admitted',
   confirmDisc: 'Discharge this patient and free the bed?', yes: 'Confirm', empty: '—',
   bedAvailable: 'This bed is available.',
   signIn: 'Sign in', signOut: 'Sign out', createAccount: 'Create account',

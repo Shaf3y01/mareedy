@@ -1,14 +1,20 @@
 <script setup lang="ts">
 const props = defineProps<{ bedId: number | null }>()
 const open = defineModel<boolean>('open', { default: false })
-const emit = defineEmits<{ confirm: [bedId: number, data: { name: string; age: string; sex: string; status: Acuity; complaint: string }] }>()
+const emit = defineEmits<{ confirm: [bedId: number, data: { name: string; age: string; sex: string; status: Acuity; complaint: string; admittedAt: string }] }>()
 
 const { t } = useI18n()
 
-const draft = reactive({ name: '', age: '', sex: 'F', status: 'stable' as Acuity, complaint: '' })
+function localNow() {
+  const d = new Date()
+  const pad = (n: number) => String(n).padStart(2, '0')
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`
+}
+
+const draft = reactive({ name: '', age: '', sex: 'F', status: 'stable' as Acuity, complaint: '', admittedAt: localNow() })
 
 watch(open, (v) => {
-  if (v) Object.assign(draft, { name: '', age: '', sex: 'F', status: 'stable', complaint: '' })
+  if (v) Object.assign(draft, { name: '', age: '', sex: 'F', status: 'stable', complaint: '', admittedAt: localNow() })
 })
 
 const padded = computed(() => (props.bedId == null ? '' : String(props.bedId).padStart(2, '0')))
@@ -56,6 +62,10 @@ function confirm() {
           <div>
             <span class="lab">{{ t('chiefC') }}</span>
             <textarea v-model="draft.complaint" class="in" :placeholder="t('addEvent')" />
+          </div>
+          <div>
+            <span class="lab">{{ t('admittedAt') }}</span>
+            <input v-model="draft.admittedAt" class="in mono" type="datetime-local" />
           </div>
         </div>
 

@@ -38,6 +38,7 @@ create table if not exists patients (
   labs            jsonb default '{}'::jsonb,         -- { abg, cbc, renal, lytes, liver, bili, inr, crp, cardiac, thyroid, hba1c }
   balance         jsonb default '{}'::jsonb,         -- { sign, value }
   recommendations text default '',
+  admitted_at     timestamptz not null default now(),
   discharged      boolean not null default false,
   created_at      timestamptz not null default now(),
   updated_at      timestamptz not null default now()

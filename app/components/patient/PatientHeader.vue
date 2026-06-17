@@ -37,6 +37,9 @@ const padded = computed(() => String(props.bedId).padStart(2, '0'))
           <span class="bed-tag">{{ t('bed') }} {{ padded }}</span>
           &nbsp; {{ patient.age }} {{ t('yrs') }} ·
           {{ patient.sex === 'F' ? t('female') : t('male') }}
+          <template v-if="patient.admittedAt">
+            &nbsp;· {{ t('admittedAt') }}: {{ patient.admittedAt }}
+          </template>
         </div>
       </div>
       <div class="phead-actions">

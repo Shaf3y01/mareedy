@@ -22,6 +22,7 @@ export default {
   discont: 'إيقاف', modify: 'تعديل', escalate: 'تصعيد', deesc: 'تخفيف',
   events: 'الأحداث', recs: 'التوصيات', addEvent: 'أضف حدثاً…', noEvents: 'لا توجد أحداث مسجلة بعد.',
   chiefC: 'الشكوى الرئيسية', acuity: 'درجة الخطورة', stable: 'مستقر', watch: 'تحت الملاحظة', critical: 'حرج',
+  admittedAt: 'وقت الإدخال',
   confirmDisc: 'تخريج هذا المريض وإخلاء السرير؟', yes: 'تأكيد', empty: '—',
   bedAvailable: 'هذا السرير متاح.',
   signIn: 'تسجيل الدخول', signOut: 'تسجيل الخروج', createAccount: 'إنشاء حساب',

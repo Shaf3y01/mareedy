@@ -13,6 +13,7 @@ export interface WardEvent { date: string; text: string }
 
 export interface Patient {
   id: string
+  admittedAt: string
   name: string; age: string; sex: string
   pmhx: string; allergies: string; habits: string
   conscious: string; bp: string; hr: string; spo2: string; o2mode: string; temp: string; rr: string
@@ -43,6 +44,7 @@ export interface Bed { id: number; patient: Patient | null }
 export function blankPatient(over: Partial<Patient> = {}): Patient {
   return {
     id: uid(),
+    admittedAt: '',
     name: '', age: '', sex: 'F', pmhx: '', allergies: '', habits: '',
     conscious: '', bp: '', hr: '', spo2: '', o2mode: 'Room Air', temp: '', rr: '',
     status: 'stable',
@@ -76,6 +78,7 @@ function dbRowToPatient(row: Record<string, any>, events: any[], meds: any[]): P
   )
   return {
     id: row.id,
+    admittedAt: row.admitted_at ? fmtDbTimestamp(row.admitted_at) : '',
     name: row.name ?? '', age: row.age ?? '', sex: row.sex ?? 'F',
     pmhx: row.pmhx ?? '', allergies: row.allergies ?? '', habits: row.habits ?? '',
     conscious: row.conscious ?? '', bp: row.bp ?? '', hr: row.hr ?? '',
@@ -158,14 +161,15 @@ export const useWardStore = defineStore('ward', () => {
 
   async function admit(
     bedId: number,
-    data: { name: string; age: string; sex: string; status: Acuity; complaint: string },
+    data: { name: string; age: string; sex: string; status: Acuity; complaint: string; admittedAt: string },
   ) {
     const bed = bedById.value(bedId)
     if (!bed) return
 
+    const admittedIso = data.admittedAt ? new Date(data.admittedAt).toISOString() : new Date().toISOString()
     const { data: row } = await supabase
       .from('patients')
-      .insert({ bed_id: bedId, name: data.name.trim(), age: data.age, sex: data.sex, status: data.status })
+      .insert({ bed_id: bedId, name: data.name.trim(), age: data.age, sex: data.sex, status: data.status, admitted_at: admittedIso })
       .select()
       .single()
     if (!row) return
