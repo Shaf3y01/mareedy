@@ -180,7 +180,7 @@ export const useWardStore = defineStore('ward', () => {
       : 'Admitted to bed ' + bedId
     const { data: ev } = await supabase
       .from('events')
-      .insert({ patient_id: row.id, body: eventText })
+      .insert({ patient_id: row.id, body: eventText, occurred_at: admittedIso })
       .select()
       .single()
 
