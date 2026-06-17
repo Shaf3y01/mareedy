@@ -39,6 +39,7 @@ create table if not exists patients (
   balance         jsonb default '{}'::jsonb,         -- { sign, value }
   recommendations text default '',
   admitted_at     timestamptz not null default now(),
+  chart_date      timestamptz,
   discharged      boolean not null default false,
   created_at      timestamptz not null default now(),
   updated_at      timestamptz not null default now()

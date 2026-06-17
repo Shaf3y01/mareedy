@@ -13,6 +13,14 @@ const o2modes = ['Room Air', 'Nasal', 'Mask', 'Venturi', 'Reservoir', 'Mechanica
     <div class="panel">
       <h3>{{ t('complaint') }}</h3>
 
+      <div class="field">
+        <div class="k">{{ t('chartDate') }}</div>
+        <input v-if="editing" v-model="patient.chartDate" class="in mono" type="datetime-local" />
+        <div v-else class="v" :class="{ empty: !patient.chartDate }">
+          {{ patient.chartDate ? fmtDbTimestamp(new Date(patient.chartDate).toISOString()) : t('empty') }}
+        </div>
+      </div>
+
       <div v-if="editing || patient.conscious" class="field">
         <div class="k">{{ t('conscious') }}</div>
         <input v-if="editing" v-model="patient.conscious" class="in" />

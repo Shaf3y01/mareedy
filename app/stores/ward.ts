@@ -16,6 +16,7 @@ export interface Patient {
   admittedAt: string
   name: string; age: string; sex: string
   pmhx: string; allergies: string; habits: string
+  chartDate: string
   conscious: string; bp: string; hr: string; spo2: string; o2mode: string; temp: string; rr: string
   status: Acuity
   exam: { appearance: string; cvs: string; chest: string; abdomen: string; limbs: string; neuro: string; examDate: string }
@@ -46,6 +47,7 @@ export function blankPatient(over: Partial<Patient> = {}): Patient {
     id: uid(),
     admittedAt: '',
     name: '', age: '', sex: 'F', pmhx: '', allergies: '', habits: '',
+    chartDate: '',
     conscious: '', bp: '', hr: '', spo2: '', o2mode: 'Room Air', temp: '', rr: '',
     status: 'stable',
     exam: { appearance: '', cvs: '', chest: '', abdomen: '', limbs: '', neuro: '', examDate: '' },
@@ -81,6 +83,7 @@ function dbRowToPatient(row: Record<string, any>, events: any[], meds: any[]): P
     admittedAt: row.admitted_at ? fmtDbTimestamp(row.admitted_at) : '',
     name: row.name ?? '', age: row.age ?? '', sex: row.sex ?? 'F',
     pmhx: row.pmhx ?? '', allergies: row.allergies ?? '', habits: row.habits ?? '',
+    chartDate: row.chart_date ? fmtDbTimestamp(row.chart_date) : '',
     conscious: row.conscious ?? '', bp: row.bp ?? '', hr: row.hr ?? '',
     spo2: row.spo2 ?? '', o2mode: row.o2mode ?? 'Room Air', temp: row.temp ?? '', rr: row.rr ?? '',
     status: (row.status ?? 'stable') as Acuity,
@@ -112,6 +115,7 @@ function patientToDbRow(p: Patient) {
   return {
     name: p.name, age: p.age, sex: p.sex,
     pmhx: p.pmhx, allergies: p.allergies, habits: p.habits,
+    chart_date: p.chartDate ? new Date(p.chartDate).toISOString() : null,
     conscious: p.conscious, bp: p.bp, hr: p.hr, spo2: p.spo2,
     o2mode: p.o2mode, temp: p.temp, rr: p.rr, status: p.status,
     exam: p.exam, imaging: p.imaging, ultrasound: p.ultrasound, endoscopy: p.endoscopy,
