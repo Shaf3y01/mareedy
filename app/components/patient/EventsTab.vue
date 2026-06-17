@@ -6,10 +6,12 @@ const { t } = useI18n()
 const ward = useWardStore()
 
 const draft = ref('')
+const eventTime = ref(localNow())
 function add() {
   if (!draft.value.trim()) return
-  ward.addEvent(props.bedId, draft.value) // store stamps the date/time
+  ward.addEvent(props.bedId, draft.value, eventTime.value)
   draft.value = ''
+  eventTime.value = localNow()
 }
 </script>
 
@@ -19,7 +21,8 @@ function add() {
       <h3>{{ t('events') }}</h3>
       <div class="ev-add">
         <textarea v-model="draft" class="in" :placeholder="t('addEvent')" />
-        <div style="display:flex;justify-content:flex-end">
+        <div style="display:flex;align-items:center;gap:8px;justify-content:flex-end;flex-wrap:wrap">
+          <input v-model="eventTime" class="in mono" type="datetime-local" style="width:auto" />
           <button class="btn btn-sm" type="button" @click="add">+ {{ t('add') }}</button>
         </div>
       </div>

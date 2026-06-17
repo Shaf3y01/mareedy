@@ -5,12 +5,6 @@ const emit = defineEmits<{ confirm: [bedId: number, data: { name: string; age: s
 
 const { t } = useI18n()
 
-function localNow() {
-  const d = new Date()
-  const pad = (n: number) => String(n).padStart(2, '0')
-  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`
-}
-
 const draft = reactive({ name: '', age: '', sex: 'F', status: 'stable' as Acuity, complaint: '', admittedAt: localNow() })
 
 watch(open, (v) => {

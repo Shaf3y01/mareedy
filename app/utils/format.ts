@@ -37,3 +37,17 @@ export function fmtDbDay(iso: string): string {
     day: '2-digit', month: 'short', year: 'numeric',
   })
 }
+
+/** Current local datetime as "YYYY-MM-DDTHH:mm" — value for datetime-local inputs. */
+export function localNow(): string {
+  const d = new Date()
+  const pad = (n: number) => String(n).padStart(2, '0')
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`
+}
+
+/** Current local date as "YYYY-MM-DD" — value for date inputs. */
+export function localToday(): string {
+  const d = new Date()
+  const pad = (n: number) => String(n).padStart(2, '0')
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`
+}

@@ -14,6 +14,14 @@ const imagingRows: [keyof Patient['imaging'], string][] = [
     <div class="panel">
       <h3>{{ t('tabImaging') }}</h3>
 
+      <div class="field">
+        <div class="k">{{ t('imagingDate') }}</div>
+        <input v-if="editing" v-model="patient.imaging.imagingDate" class="in mono" type="datetime-local" />
+        <div v-else class="v" :class="{ empty: !patient.imaging.imagingDate }">
+          {{ patient.imaging.imagingDate ? fmtDbTimestamp(new Date(patient.imaging.imagingDate).toISOString()) : t('empty') }}
+        </div>
+      </div>
+
       <div v-for="r in imagingRows" :key="r[0]" class="field">
         <div class="k">{{ t(r[1]) }}</div>
         <textarea v-if="editing" v-model="patient.imaging[r[0]]" class="in" />

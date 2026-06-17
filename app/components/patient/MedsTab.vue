@@ -6,12 +6,12 @@ const { t } = useI18n()
 const ward = useWardStore()
 
 const showForm = ref(false)
-const draft = reactive({ name: '', dose: '', route: 'PO', freq: '' })
+const draft = reactive({ name: '', dose: '', route: 'PO', freq: '', startedOn: localToday() })
 
 function add() {
   if (!draft.name.trim()) return
   ward.addMed(props.bedId, { ...draft })
-  Object.assign(draft, { name: '', dose: '', route: 'PO', freq: '' })
+  Object.assign(draft, { name: '', dose: '', route: 'PO', freq: '', startedOn: localToday() })
   showForm.value = false
 }
 function badge(status: string) {
@@ -38,6 +38,10 @@ function badge(status: string) {
               <select v-model="draft.route" class="in"><option>PO</option><option>IV</option><option>IM</option><option>SC</option><option>NEB</option><option>PR</option></select>
             </div>
             <div><span class="lab">{{ t('freq') }}</span><input v-model="draft.freq" class="in" placeholder="OD / q8h" /></div>
+          </div>
+          <div>
+            <span class="lab">{{ t('started') }}</span>
+            <input v-model="draft.startedOn" class="in mono" type="date" />
           </div>
         </div>
         <div class="sheet-actions" style="margin-top:14px">

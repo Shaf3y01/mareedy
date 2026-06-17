@@ -19,7 +19,7 @@ export interface Patient {
   conscious: string; bp: string; hr: string; spo2: string; o2mode: string; temp: string; rr: string
   status: Acuity
   exam: { appearance: string; cvs: string; chest: string; abdomen: string; limbs: string; neuro: string }
-  imaging: { ctChest: string; ctBrain: string; xray: string; paus: string }
+  imaging: { ctChest: string; ctBrain: string; xray: string; paus: string; imagingDate: string }
   ultrasound: string; endoscopy: string
   abg: { ph: string; co2: string; hco3: string; lactate: string }
   cbc: { tlc: string; hb: string; plt: string }
@@ -49,7 +49,7 @@ export function blankPatient(over: Partial<Patient> = {}): Patient {
     conscious: '', bp: '', hr: '', spo2: '', o2mode: 'Room Air', temp: '', rr: '',
     status: 'stable',
     exam: { appearance: '', cvs: '', chest: '', abdomen: '', limbs: '', neuro: '' },
-    imaging: { ctChest: '', ctBrain: '', xray: '', paus: '' },
+    imaging: { ctChest: '', ctBrain: '', xray: '', paus: '', imagingDate: '' },
     ultrasound: '', endoscopy: '',
     abg: { ph: '', co2: '', hco3: '', lactate: '' },
     cbc: { tlc: '', hb: '', plt: '' },
@@ -212,30 +212,32 @@ export const useWardStore = defineStore('ward', () => {
     beds.value = beds.value.filter(b => b.id !== bedId)
   }
 
-  async function addEvent(bedId: number, text: string) {
+  async function addEvent(bedId: number, text: string, occurredAt?: string) {
     const p = bedById.value(bedId)?.patient
     if (!p || !text.trim()) return
+    const occurred_at = occurredAt ? new Date(occurredAt).toISOString() : new Date().toISOString()
     const { data: ev } = await supabase
       .from('events')
-      .insert({ patient_id: p.id, body: text.trim() })
+      .insert({ patient_id: p.id, body: text.trim(), occurred_at })
       .select()
       .single()
     p.events.unshift({
-      date: ev ? fmtDbTimestamp(ev.occurred_at) : fmtNow(),
+      date: ev ? fmtDbTimestamp(ev.occurred_at) : fmtDbTimestamp(occurred_at),
       text: text.trim(),
     })
   }
 
-  async function addMed(bedId: number, draft: { name: string; dose: string; route: string; freq: string }) {
+  async function addMed(bedId: number, draft: { name: string; dose: string; route: string; freq: string; startedOn?: string }) {
     const p = bedById.value(bedId)?.patient
     if (!p || !draft.name.trim()) return
-    const log: MedLog[] = [{ date: fmtToday(), text: 'Started' }]
+    const startedDate = draft.startedOn ?? new Date().toISOString().slice(0, 10)
+    const log: MedLog[] = [{ date: fmtDbDay(startedDate), text: 'Started' }]
     const { data: row } = await supabase
       .from('meds')
       .insert({
         patient_id: p.id,
         name: draft.name.trim(), dose: draft.dose, route: draft.route, freq: draft.freq,
-        started: new Date().toISOString().slice(0, 10),
+        started: startedDate,
         status: 'active', log,
       })
       .select()
@@ -243,7 +245,7 @@ export const useWardStore = defineStore('ward', () => {
     if (row) {
       p.meds.push({
         id: row.id, name: row.name, dose: row.dose ?? '', route: row.route ?? 'PO', freq: row.freq ?? '',
-        start: fmtToday(), status: 'active', editing: false, log,
+        start: fmtDbDay(startedDate), status: 'active', editing: false, log,
       })
     }
   }
