@@ -15,7 +15,7 @@ function openAdmit(bedId: number) {
 
 function onAdmit(
   bedId: number,
-  data: { name: string; age: string; sex: string; status: Acuity; complaint: string },
+  data: { name: string; age: string; sex: string; status: Acuity; complaint: string; admittedAt: string },
 ) {
   ward.admit(bedId, data)
   navigateTo(`/bed/${bedId}?new=1`) // open the new chart in edit mode
