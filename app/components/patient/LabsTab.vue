@@ -1,26 +1,29 @@
 <script setup lang="ts">
-import type { Patient } from '~/stores/ward'
+import type { Patient, LabsSet } from '~/stores/ward'
 
 const props = defineProps<{ patient: Patient; editing: boolean }>()
 const { t } = useI18n()
 
+type SetKey = 'admission' | 'yesterday' | 'today'
+const activeSet = ref<SetKey>('today')
+const set = computed(() => props.patient.labsSets[activeSet.value])
+
 type Row = [label: string, key: string, unit?: string]
 interface Group { title: string; obj: Record<string, string>; rows: Row[] }
 
-// `obj` points at the real reactive object, so v-model edits update the store.
 const groups = computed<Group[]>(() => {
-  const p = props.patient
+  const s = set.value
   return [
-    { title: t('abg'), obj: p.abg, rows: [['pH', 'ph'], ['CO₂', 'co2', 'mmHg'], ['HCO₃', 'hco3', 'mmol/L'], ['Lactate', 'lactate', 'mmol/L']] },
-    { title: t('cbc'), obj: p.cbc, rows: [['TLC', 'tlc', '×10⁹/L'], ['Hb', 'hb', 'g/dL'], ['PLT', 'plt', '×10⁹/L']] },
-    { title: t('renal'), obj: p.renal, rows: [['Urea', 'urea', 'mmol/L'], ['Creatinine', 'creatinine', 'mg/dL']] },
-    { title: t('lytes'), obj: p.lytes, rows: [['Na⁺', 'na', 'mmol/L'], ['K⁺', 'k', 'mmol/L'], ['Ca²⁺ (ion)', 'ca', 'mmol/L']] },
-    { title: t('liverg'), obj: p.liver, rows: [['AST', 'ast', 'U/L'], ['ALT', 'alt', 'U/L'], ['Albumin', 'albumin', 'g/dL']] },
-    { title: t('bilig'), obj: p.bili, rows: [['Total', 'total', 'mg/dL'], ['Direct', 'direct', 'mg/dL'], ['Indirect', 'indirect', 'mg/dL']] },
-    { title: t('coag'), obj: p as unknown as Record<string, string>, rows: [['INR', 'inr'], ['CRP', 'crp', 'mg/L']] },
-    { title: t('cardiac'), obj: p.cardiac, rows: [['Troponin', 'troponin', 'ng/mL'], ['CK-MB', 'ckmb', 'ng/mL']] },
-    { title: t('thyroidg'), obj: p.thyroid, rows: [['TSH', 'tsh', 'mIU/L'], ['FT3', 'ft3', 'pmol/L'], ['FT4', 'ft4', 'pmol/L']] },
-    { title: t('metab'), obj: p as unknown as Record<string, string>, rows: [['HbA1c', 'hba1c', '%']] },
+    { title: t('abg'), obj: s.abg, rows: [['pH', 'ph'], ['CO₂', 'co2', 'mmHg'], ['HCO₃', 'hco3', 'mmol/L'], ['Lactate', 'lactate', 'mmol/L']] },
+    { title: t('cbc'), obj: s.cbc, rows: [['TLC', 'tlc', '×10⁹/L'], ['Hb', 'hb', 'g/dL'], ['PLT', 'plt', '×10⁹/L']] },
+    { title: t('renal'), obj: s.renal, rows: [['Urea', 'urea', 'mmol/L'], ['Creatinine', 'creatinine', 'mg/dL']] },
+    { title: t('lytes'), obj: s.lytes, rows: [['Na⁺', 'na', 'mmol/L'], ['K⁺', 'k', 'mmol/L'], ['Ca²⁺ (ion)', 'ca', 'mmol/L']] },
+    { title: t('liverg'), obj: s.liver, rows: [['AST', 'ast', 'U/L'], ['ALT', 'alt', 'U/L'], ['Albumin', 'albumin', 'g/dL']] },
+    { title: t('bilig'), obj: s.bili, rows: [['Total', 'total', 'mg/dL'], ['Direct', 'direct', 'mg/dL'], ['Indirect', 'indirect', 'mg/dL']] },
+    { title: t('coag'), obj: s as unknown as Record<string, string>, rows: [['INR', 'inr'], ['CRP', 'crp', 'mg/L']] },
+    { title: t('cardiac'), obj: s.cardiac, rows: [['Troponin', 'troponin', 'ng/mL'], ['CK-MB', 'ckmb', 'ng/mL']] },
+    { title: t('thyroidg'), obj: s.thyroid, rows: [['TSH', 'tsh', 'mIU/L'], ['FT3', 'ft3', 'pmol/L'], ['FT4', 'ft4', 'pmol/L']] },
+    { title: t('metab'), obj: s as unknown as Record<string, string>, rows: [['HbA1c', 'hba1c', '%']] },
   ]
 })
 </script>
@@ -29,11 +32,22 @@ const groups = computed<Group[]>(() => {
   <div class="panels">
     <div class="panel">
       <h3>{{ t('tabLabs') }}</h3>
+
+      <!-- Sub-tabs -->
+      <div class="tabs" style="margin-bottom:12px">
+        <button
+          v-for="key in (['admission', 'yesterday', 'today'] as const)" :key="key"
+          type="button" class="tab" :class="{ active: activeSet === key }"
+          @click="activeSet = key"
+        >{{ t(`labs_${key}`) }}</button>
+      </div>
+
+      <!-- Date/time for this set -->
       <div class="field" style="margin-bottom:8px">
         <div class="k">{{ t('labsDate') }}</div>
-        <input v-if="editing" v-model="patient.labsDate" class="in mono" type="datetime-local" />
-        <div v-else class="v" :class="{ empty: !patient.labsDate }">
-          {{ patient.labsDate ? fmtDbTimestamp(new Date(patient.labsDate).toISOString()) : t('empty') }}
+        <input v-if="editing" v-model="patient.labsSets[activeSet].labsDate" class="in mono" type="datetime-local" />
+        <div v-else class="v" :class="{ empty: !set.labsDate }">
+          {{ set.labsDate ? fmtDbTimestamp(new Date(set.labsDate).toISOString()) : t('empty') }}
         </div>
       </div>
 

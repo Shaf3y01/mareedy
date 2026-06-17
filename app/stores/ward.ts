@@ -11,6 +11,20 @@ export interface Med {
 }
 export interface WardEvent { date: string; text: string }
 
+export interface LabsSet {
+  labsDate: string
+  abg: { ph: string; co2: string; hco3: string; lactate: string }
+  cbc: { tlc: string; hb: string; plt: string }
+  renal: { urea: string; creatinine: string }
+  lytes: { na: string; k: string; ca: string }
+  liver: { ast: string; alt: string; albumin: string }
+  bili: { total: string; direct: string; indirect: string }
+  inr: string; crp: string
+  cardiac: { troponin: string; ckmb: string }
+  thyroid: { tsh: string; ft3: string; ft4: string }
+  hba1c: string
+}
+
 export interface Patient {
   id: string
   admittedAt: string
@@ -23,16 +37,7 @@ export interface Patient {
   exam: { appearance: string; cvs: string; chest: string; abdomen: string; limbs: string; neuro: string; examDate: string }
   imaging: { ctChest: string; ctBrain: string; xray: string; paus: string; imagingDate: string }
   ultrasound: string; endoscopy: string
-  abg: { ph: string; co2: string; hco3: string; lactate: string }
-  cbc: { tlc: string; hb: string; plt: string }
-  renal: { urea: string; creatinine: string }
-  lytes: { na: string; k: string; ca: string }
-  liver: { ast: string; alt: string; albumin: string }
-  bili: { total: string; direct: string; indirect: string }
-  inr: string; crp: string; labsDate: string
-  cardiac: { troponin: string; ckmb: string }
-  thyroid: { tsh: string; ft3: string; ft4: string }
-  hba1c: string
+  labsSets: { admission: LabsSet; yesterday: LabsSet; today: LabsSet }
   balance: { sign: '+' | '-'; value: string }
   events: WardEvent[]
   recommendations: string
@@ -43,6 +48,22 @@ export interface Bed { id: number; patient: Patient | null }
 /* ------------------------------------------------------------------ */
 /*  Factory for an empty patient (every field present → safe to edit)  */
 /* ------------------------------------------------------------------ */
+export function blankLabsSet(): LabsSet {
+  return {
+    labsDate: '',
+    abg: { ph: '', co2: '', hco3: '', lactate: '' },
+    cbc: { tlc: '', hb: '', plt: '' },
+    renal: { urea: '', creatinine: '' },
+    lytes: { na: '', k: '', ca: '' },
+    liver: { ast: '', alt: '', albumin: '' },
+    bili: { total: '', direct: '', indirect: '' },
+    inr: '', crp: '',
+    cardiac: { troponin: '', ckmb: '' },
+    thyroid: { tsh: '', ft3: '', ft4: '' },
+    hba1c: '',
+  }
+}
+
 export function blankPatient(over: Partial<Patient> = {}): Patient {
   return {
     id: uid(),
@@ -55,16 +76,7 @@ export function blankPatient(over: Partial<Patient> = {}): Patient {
     exam: { appearance: '', cvs: '', chest: '', abdomen: '', limbs: '', neuro: '', examDate: '' },
     imaging: { ctChest: '', ctBrain: '', xray: '', paus: '', imagingDate: '' },
     ultrasound: '', endoscopy: '',
-    abg: { ph: '', co2: '', hco3: '', lactate: '' },
-    cbc: { tlc: '', hb: '', plt: '' },
-    renal: { urea: '', creatinine: '' },
-    lytes: { na: '', k: '', ca: '' },
-    liver: { ast: '', alt: '', albumin: '' },
-    bili: { total: '', direct: '', indirect: '' },
-    inr: '', crp: '', labsDate: '',
-    cardiac: { troponin: '', ckmb: '' },
-    thyroid: { tsh: '', ft3: '', ft4: '' },
-    hba1c: '',
+    labsSets: { admission: blankLabsSet(), yesterday: blankLabsSet(), today: blankLabsSet() },
     balance: { sign: '-', value: '' },
     events: [], recommendations: '', meds: [],
     ...over,
@@ -74,9 +86,26 @@ export function blankPatient(over: Partial<Patient> = {}): Patient {
 /* ------------------------------------------------------------------ */
 /*  DB ↔ App mapping                                                   */
 /* ------------------------------------------------------------------ */
+function readLabsSet(src: Record<string, any>): LabsSet {
+  const b = blankLabsSet()
+  return {
+    labsDate: src.labsDate ?? '',
+    abg: { ...b.abg, ...(src.abg ?? {}) },
+    cbc: { ...b.cbc, ...(src.cbc ?? {}) },
+    renal: { ...b.renal, ...(src.renal ?? {}) },
+    lytes: { ...b.lytes, ...(src.lytes ?? {}) },
+    liver: { ...b.liver, ...(src.liver ?? {}) },
+    bili: { ...b.bili, ...(src.bili ?? {}) },
+    inr: src.inr ?? '', crp: src.crp ?? '',
+    cardiac: { ...b.cardiac, ...(src.cardiac ?? {}) },
+    thyroid: { ...b.thyroid, ...(src.thyroid ?? {}) },
+    hba1c: src.hba1c ?? '',
+  }
+}
+
 function dbRowToPatient(row: Record<string, any>, events: any[], meds: any[]): Patient {
   const labs = (row.labs as Record<string, any>) ?? {}
-  const b = blankPatient()
+  const admissionSrc = labs.admission ?? (labs.abg ? labs : {})
   const sortedEvents = [...events].sort(
     (a, z) => new Date(z.occurred_at).getTime() - new Date(a.occurred_at).getTime(),
   )
@@ -93,16 +122,11 @@ function dbRowToPatient(row: Record<string, any>, events: any[], meds: any[]): P
     exam: { ...b.exam, ...(row.exam ?? {}) },
     imaging: { ...b.imaging, ...(row.imaging ?? {}) },
     ultrasound: row.ultrasound ?? '', endoscopy: row.endoscopy ?? '',
-    abg: { ...b.abg, ...(labs.abg ?? {}) },
-    cbc: { ...b.cbc, ...(labs.cbc ?? {}) },
-    renal: { ...b.renal, ...(labs.renal ?? {}) },
-    lytes: { ...b.lytes, ...(labs.lytes ?? {}) },
-    liver: { ...b.liver, ...(labs.liver ?? {}) },
-    bili: { ...b.bili, ...(labs.bili ?? {}) },
-    inr: labs.inr ?? '', crp: labs.crp ?? '', labsDate: labs.labsDate ?? '',
-    cardiac: { ...b.cardiac, ...(labs.cardiac ?? {}) },
-    thyroid: { ...b.thyroid, ...(labs.thyroid ?? {}) },
-    hba1c: labs.hba1c ?? '',
+    labsSets: {
+      admission: readLabsSet(admissionSrc),
+      yesterday: readLabsSet(labs.yesterday ?? {}),
+      today: readLabsSet(labs.today ?? {}),
+    },
     balance: { sign: '-', value: '', ...(row.balance ?? {}) } as Patient['balance'],
     recommendations: row.recommendations ?? '',
     events: sortedEvents.map(e => ({ date: fmtDbTimestamp(e.occurred_at), text: e.body })),
@@ -124,12 +148,7 @@ function patientToDbRow(p: Patient) {
     conscious: p.conscious, bp: p.bp, hr: p.hr, spo2: p.spo2,
     o2mode: p.o2mode, temp: p.temp, rr: p.rr, status: p.status,
     exam: p.exam, imaging: p.imaging, ultrasound: p.ultrasound, endoscopy: p.endoscopy,
-    labs: {
-      abg: p.abg, cbc: p.cbc, renal: p.renal, lytes: p.lytes,
-      liver: p.liver, bili: p.bili, inr: p.inr, crp: p.crp,
-      cardiac: p.cardiac, thyroid: p.thyroid, hba1c: p.hba1c,
-      labsDate: p.labsDate,
-    },
+    labs: p.labsSets,
     balance: p.balance, recommendations: p.recommendations,
     updated_at: new Date().toISOString(),
   }
