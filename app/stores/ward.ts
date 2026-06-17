@@ -106,6 +106,7 @@ function readLabsSet(src: Record<string, any>): LabsSet {
 function dbRowToPatient(row: Record<string, any>, events: any[], meds: any[]): Patient {
   const labs = (row.labs as Record<string, any>) ?? {}
   const admissionSrc = labs.admission ?? (labs.abg ? labs : {})
+  const b = blankPatient()
   const sortedEvents = [...events].sort(
     (a, z) => new Date(z.occurred_at).getTime() - new Date(a.occurred_at).getTime(),
   )
