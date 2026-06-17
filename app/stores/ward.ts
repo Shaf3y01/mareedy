@@ -80,7 +80,7 @@ function dbRowToPatient(row: Record<string, any>, events: any[], meds: any[]): P
   )
   return {
     id: row.id,
-    admittedAt: row.admitted_at ? fmtDbTimestamp(row.admitted_at) : '',
+    admittedAt: row.admitted_at ? isoToLocalInput(row.admitted_at) : '',
     name: row.name ?? '', age: row.age ?? '', sex: row.sex ?? 'F',
     pmhx: row.pmhx ?? '', allergies: row.allergies ?? '', habits: row.habits ?? '',
     chartDate: row.chart_date ? fmtDbTimestamp(row.chart_date) : '',
@@ -115,6 +115,7 @@ function patientToDbRow(p: Patient) {
   return {
     name: p.name, age: p.age, sex: p.sex,
     pmhx: p.pmhx, allergies: p.allergies, habits: p.habits,
+    admitted_at: p.admittedAt ? new Date(p.admittedAt).toISOString() : null,
     chart_date: p.chartDate ? new Date(p.chartDate).toISOString() : null,
     conscious: p.conscious, bp: p.bp, hr: p.hr, spo2: p.spo2,
     o2mode: p.o2mode, temp: p.temp, rr: p.rr, status: p.status,

@@ -67,6 +67,14 @@ const o2modes = ['Room Air', 'Nasal', 'Mask', 'Venturi', 'Reservoir', 'Mechanica
     <div class="panel">
       <h3>{{ t('attributes') }}</h3>
 
+      <div class="field">
+        <div class="k">{{ t('admittedAt') }}</div>
+        <input v-if="editing" v-model="patient.admittedAt" class="in mono" type="datetime-local" />
+        <div v-else class="v" :class="{ empty: !patient.admittedAt }">
+          {{ patient.admittedAt ? fmtDbTimestamp(new Date(patient.admittedAt).toISOString()) : t('empty') }}
+        </div>
+      </div>
+
       <div v-if="editing" class="field">
         <div class="k">{{ t('name') }}</div>
         <input v-model="patient.name" class="in" />

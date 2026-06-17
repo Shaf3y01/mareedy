@@ -38,7 +38,7 @@ const padded = computed(() => String(props.bedId).padStart(2, '0'))
           &nbsp; {{ patient.age }} {{ t('yrs') }} ·
           {{ patient.sex === 'F' ? t('female') : t('male') }}
           <template v-if="patient.admittedAt">
-            &nbsp;· {{ t('admittedAt') }}: {{ patient.admittedAt }}
+            &nbsp;· {{ t('admittedAt') }}: {{ fmtDbTimestamp(new Date(patient.admittedAt).toISOString()) }}
           </template>
         </div>
       </div>

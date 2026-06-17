@@ -38,6 +38,13 @@ export function fmtDbDay(iso: string): string {
   })
 }
 
+/** Convert a UTC ISO string to "YYYY-MM-DDTHH:mm" local time — for binding to datetime-local inputs. */
+export function isoToLocalInput(iso: string): string {
+  const d = new Date(iso)
+  const pad = (n: number) => String(n).padStart(2, '0')
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`
+}
+
 /** Current local datetime as "YYYY-MM-DDTHH:mm" — value for datetime-local inputs. */
 export function localNow(): string {
   const d = new Date()
