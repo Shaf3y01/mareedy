@@ -264,3 +264,7 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
 .fade-enter-active,.fade-leave-active{transition:opacity .18s, transform .18s}
 .fade-enter-from{opacity:0;transform:translateY(6px)}
 .fade-leave-to{opacity:0}
+
+.app-footer{text-align:center;padding:24px 16px 32px;font-size:12px;color:var(--ink-3)}
+.app-footer a{color:var(--ink-3);text-decoration:none;font-weight:500;transition:.12s}
+.app-footer a:hover{color:var(--accent)}

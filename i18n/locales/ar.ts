@@ -32,4 +32,5 @@ export default {
   signIn: 'تسجيل الدخول', signOut: 'تسجيل الخروج', createAccount: 'إنشاء حساب',
   accountCreated: 'تم إنشاء الحساب — يمكنك تسجيل الدخول الآن.',
   email: 'البريد الإلكتروني', emailPlaceholder: "you{'@'}clinic.org", password: 'كلمة المرور',
+  devCredit: 'تم التطوير بواسطة الشافعي',
 }

@@ -30,4 +30,5 @@ export default {
   signIn: 'Sign in', signOut: 'Sign out', createAccount: 'Create account',
   accountCreated: 'Account created — you can sign in now.',
   email: 'Email', emailPlaceholder: "you{'@'}clinic.org", password: 'Password',
+  devCredit: 'Developed by Shaf3y',
 }
