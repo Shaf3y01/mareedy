@@ -3,6 +3,7 @@ definePageMeta({ layout: false })
 
 const supabase = useSupabaseClient()
 const { t, locale, setLocale } = useI18n()
+const route = useRoute()
 
 const email = ref('')
 const password = ref('')
@@ -18,7 +19,7 @@ async function signIn() {
   })
   busy.value = false
   if (error) { msg.value = error.message; return }
-  navigateTo('/')
+  navigateTo((route.query.redirect as string) || '/')
 }
 
 async function signUp() {
