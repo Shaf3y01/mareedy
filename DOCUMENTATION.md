@@ -1,6 +1,6 @@
 # Mareedy — Technical & Project Documentation
 
-**Version:** 1.1.0  
+**Version:** 1.2.0  
 **Last updated:** June 2026  
 **Live URL:** https://mareedy.vercel.app  
 **Repository:** https://github.com/Shaf3y01/mareedy
@@ -323,7 +323,17 @@ Intended workflow: hit **New Day** once at the start of each shift handover.
   - The bed card on the ward overview
   - The patient header on the chart page
 
-### 7.6 Edit / Save Flow
+### 7.6 QR Code Bed Access
+
+Each physical bed has a printed QR code that encodes its direct URL (`https://mareedy.vercel.app/bed/[id]`). Scanning the QR code with any phone camera opens the bed's chart page instantly — no app store installation required.
+
+**Generating codes:** A printable HTML sheet (`mareedy-qr-codes.html`) containing all 9 bed QR codes can be generated from the scratchpad directory. Each card shows the bed number, a teal QR code, and the full URL. Print, laminate, and attach one per bed.
+
+**Authentication handling:** If the scanning user is already logged in, they land directly on the bed chart. If not logged in, the Supabase middleware redirects them to `/login?redirect=/bed/[id]`. After successful sign-in, `login.vue` reads the `redirect` query param and navigates to the originally requested bed rather than the home screen.
+
+**Device support:** Native camera on iOS 13+ and Android reads the code without a third-party app. Works whether Mareedy is installed as a PWA or accessed in the browser.
+
+### 7.7 Edit / Save Flow
 
 - A pencil icon button in `PatientHeader` toggles edit mode globally across all tabs.
 - All form inputs are rendered only when `editing === true`; read-only display otherwise.
@@ -331,13 +341,13 @@ Intended workflow: hit **New Day** once at the start of each shift handover.
 - Medications use their own save cycle: `toggleMedEdit` saves name/dose/route/freq/log when the inline edit is closed.
 - The Labs **New Day** rollover also calls `savePatient` immediately, bypassing the edit mode cycle.
 
-### 7.5 Discharge
+### 7.8 Discharge
 
 - Discharge button in `PatientHeader` → inline confirmation → `ward.discharge(bedId)`.
 - DB: sets `discharged = true`, `bed_id = null` on the patient row.
 - Historical records are preserved in the database; only active admissions (discharged = false) are fetched on load.
 
-### 7.6 Authentication
+### 7.9 Authentication
 
 - Email/password sign-in and account creation on `/login`.
 - Supabase GoTrue issues a JWT stored in a cookie/localStorage by the Supabase client.
@@ -352,10 +362,19 @@ Intended workflow: hit **New Day** once at the start of each shift handover.
 ### Login Flow
 ```
 User visits any URL
-  → Not authenticated → redirect to /login
+  → Not authenticated → redirect to /login?redirect=<original path>
   → Enter email + password → signInWithPassword()
-  → Success → navigate to /
+  → Success → navigate to redirect param (or / if none)
   → Session cookie set → all subsequent requests carry JWT
+```
+
+### QR Code Scan Flow
+```
+Doctor scans bed QR code (e.g. /bed/3)
+  → Already logged in → lands directly on Bed 3 chart
+  → Not logged in → redirect to /login?redirect=/bed/3
+  → Sign in → navigate to /bed/3 (redirect param restored)
+  → Ward data already loaded (via default layout) → patient chart shown immediately
 ```
 
 ### Admit Patient Flow
@@ -413,6 +432,8 @@ Patient chart → Discharge button
 ## 9. State Management Design
 
 The entire ward state lives in a single Pinia setup store (`app/stores/ward.ts`).
+
+`loadWard()` is called via `callOnce('loadWard', ...)` in `app/layouts/default.vue` so it runs exactly once per session regardless of which page the user lands on (home, direct QR link, etc.). The login page opts out via `definePageMeta({ layout: false })`, so `loadWard` is never called while unauthenticated.
 
 ### State Shape
 ```ts
@@ -686,12 +707,18 @@ The following must be addressed before using this system with real patient data.
 - New Day rollover button (Today → Yesterday, clear Today, immediate save)
 - Add Bed button hidden from UI
 
-### Near-term (v1.2)
+### Completed in v1.2
+- **QR code bed access** — each physical bed has a printed QR code linking directly to its chart page; works with or without the PWA installed
+- **Post-login redirect** — scanning a QR while logged out redirects to login and then back to the correct bed after sign-in
+- **Direct-link ward loading** — `loadWard()` moved to the default layout so navigating directly to `/bed/[id]` (e.g. via QR scan) loads patient data correctly without visiting the home page first
+- **Developer footer** — persistent footer on all pages linking to developer portfolio
+
+### Near-term (v1.3)
 - **Supabase Realtime** — push bed/patient changes to all open sessions so multiple staff see updates live without refresh.
 - **Acuity-based sorting** — sort bed grid by criticality (critical first) with a toggle.
 - **Print view** — CSS `@media print` layout for ward round handover sheets.
 
-### Medium-term (v1.3)
+### Medium-term (v1.4)
 - **Multi-ward support** — `ward_id` column, ward selector in AppBar.
 - **Role-based access** — nurse vs. doctor vs. read-only viewer.
 - **Offline write queue** — queue mutations when offline, flush on reconnect using Supabase's offline capabilities.
