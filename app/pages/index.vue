@@ -3,8 +3,6 @@ const { t } = useI18n()
 const ward = useWardStore()
 const { beds, occupiedCount } = storeToRefs(ward)
 
-await callOnce('loadWard', () => ward.loadWard())
-
 const admitOpen = ref(false)
 const admitBedId = ref<number | null>(null)
 

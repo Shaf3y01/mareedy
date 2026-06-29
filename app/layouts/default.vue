@@ -1,5 +1,7 @@
 <script setup lang="ts">
 const { t } = useI18n()
+const ward = useWardStore()
+await callOnce('loadWard', () => ward.loadWard())
 </script>
 
 <template>
