@@ -202,7 +202,7 @@ export const useWardStore = defineStore('ward', () => {
     const admittedIso = data.admittedAt ? new Date(data.admittedAt).toISOString() : new Date().toISOString()
     const { data: row } = await supabase
       .from('patients')
-      .insert({ bed_id: bedId, patient_no: data.patientNo, name: data.name.trim(), age: data.age, sex: data.sex, status: data.status, admitted_at: admittedIso })
+      .insert({ bed_id: bedId, patient_no: data.patientNo, name: data.name.trim(), age: data.age, sex: data.sex, status: data.status, admitted_at: admittedIso, chief_complaint: data.complaint.trim() })
       .select()
       .single()
     if (!row) return
