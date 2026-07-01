@@ -11,11 +11,11 @@ function openAdmit(bedId: number) {
   admitOpen.value = true
 }
 
-function onAdmit(
+async function onAdmit(
   bedId: number,
   data: { patientNo: string; name: string; age: string; sex: string; status: Acuity; complaint: string; admittedAt: string },
 ) {
-  ward.admit(bedId, data)
+  await ward.admit(bedId, data)
   navigateTo(`/bed/${bedId}?new=1`) // open the new chart in edit mode
 }
 
