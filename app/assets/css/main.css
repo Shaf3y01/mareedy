@@ -231,9 +231,8 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
 .ev:last-child::after{display:none}
 .ev .d{font-family:var(--mono);font-size:11px;color:var(--ink-3);direction:ltr;display:inline-block}
 .ev .t{font-size:14px;color:var(--ink);margin-top:2px;white-space:pre-wrap}
-.ev-del{position:absolute;inset-inline-end:0;top:0;background:none;border:none;cursor:pointer;padding:4px;color:var(--ink-3);opacity:0;transition:.15s;line-height:0}
+.ev-del{position:absolute;inset-inline-end:0;top:0;background:none;border:none;cursor:pointer;padding:4px;color:var(--ink-3);transition:.15s;line-height:0}
 .ev-del svg{width:14px;height:14px}
-.ev:hover .ev-del{opacity:1}
 .ev-del:hover{color:var(--crit)}
 
 /* admit / sheet */
