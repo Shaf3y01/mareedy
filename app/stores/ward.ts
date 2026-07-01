@@ -116,7 +116,7 @@ function dbRowToPatient(row: Record<string, any>, events: any[], meds: any[]): P
     patientNo: row.patient_no ?? '',
     name: row.name ?? '', age: row.age ?? '', sex: row.sex ?? 'F',
     pmhx: row.pmhx ?? '', allergies: row.allergies ?? '', habits: row.habits ?? '',
-    chartDate: row.chart_date ? fmtDbTimestamp(row.chart_date) : '',
+    chartDate: row.chart_date ? isoToLocalInput(row.chart_date) : '',
     conscious: row.conscious ?? '', bp: row.bp ?? '', hr: row.hr ?? '',
     spo2: row.spo2 ?? '', o2mode: row.o2mode ?? 'Room Air', temp: row.temp ?? '', rr: row.rr ?? '',
     status: (row.status ?? 'stable') as Acuity,
