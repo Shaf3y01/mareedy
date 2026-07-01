@@ -30,6 +30,7 @@ export interface Patient {
   admittedAt: string
   patientNo: string
   name: string; age: string; sex: string
+  chiefComplaint: string
   pmhx: string; allergies: string; habits: string
   chartDate: string
   conscious: string; bp: string; hr: string; spo2: string; o2mode: string; temp: string; rr: string
@@ -69,7 +70,7 @@ export function blankPatient(over: Partial<Patient> = {}): Patient {
     id: uid(),
     admittedAt: '',
     patientNo: '',
-    name: '', age: '', sex: 'F', pmhx: '', allergies: '', habits: '',
+    name: '', age: '', sex: 'F', chiefComplaint: '', pmhx: '', allergies: '', habits: '',
     chartDate: '',
     conscious: '', bp: '', hr: '', spo2: '', o2mode: 'Room Air', temp: '', rr: '',
     status: 'stable',
@@ -115,6 +116,7 @@ function dbRowToPatient(row: Record<string, any>, events: any[], meds: any[]): P
     admittedAt: row.admitted_at ? isoToLocalInput(row.admitted_at) : '',
     patientNo: row.patient_no ?? '',
     name: row.name ?? '', age: row.age ?? '', sex: row.sex ?? 'F',
+    chiefComplaint: row.chief_complaint ?? '',
     pmhx: row.pmhx ?? '', allergies: row.allergies ?? '', habits: row.habits ?? '',
     chartDate: row.chart_date ? isoToLocalInput(row.chart_date) : '',
     conscious: row.conscious ?? '', bp: row.bp ?? '', hr: row.hr ?? '',
@@ -143,6 +145,7 @@ function patientToDbRow(p: Patient) {
   return {
     patient_no: p.patientNo,
     name: p.name, age: p.age, sex: p.sex,
+    chief_complaint: p.chiefComplaint,
     pmhx: p.pmhx, allergies: p.allergies, habits: p.habits,
     admitted_at: p.admittedAt ? new Date(p.admittedAt).toISOString() : null,
     chart_date: p.chartDate ? new Date(p.chartDate).toISOString() : null,

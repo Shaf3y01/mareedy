@@ -94,6 +94,12 @@ const o2modes = ['Room Air', 'Nasal', 'Mask', 'Venturi', 'Reservoir', 'Mechanica
       </div>
 
       <div class="field">
+        <div class="k">{{ t('chiefC') }}</div>
+        <input v-if="editing" v-model="patient.chiefComplaint" class="in" />
+        <div v-else class="v" :class="{ empty: !patient.chiefComplaint }">{{ patient.chiefComplaint || t('empty') }}</div>
+      </div>
+
+      <div class="field">
         <div class="k">{{ t('pmhx') }}</div>
         <input v-if="editing" v-model="patient.pmhx" class="in" />
         <div v-else class="v" :class="{ empty: !patient.pmhx }">{{ patient.pmhx || t('empty') }}</div>
