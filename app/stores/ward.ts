@@ -9,7 +9,7 @@ export interface Med {
   start: string; status: 'active' | 'escalated' | 'de-escalated' | 'discontinued'
   editing?: boolean; log: MedLog[]
 }
-export interface WardEvent { date: string; text: string }
+export interface WardEvent { id: string; date: string; text: string }
 
 export interface LabsSet {
   labsDate: string
@@ -132,7 +132,7 @@ function dbRowToPatient(row: Record<string, any>, events: any[], meds: any[]): P
     },
     balance: { sign: '-', value: '', ...(row.balance ?? {}) } as Patient['balance'],
     recommendations: row.recommendations ?? '',
-    events: sortedEvents.map(e => ({ date: fmtDbTimestamp(e.occurred_at), text: e.body })),
+    events: sortedEvents.map(e => ({ id: e.id, date: fmtDbTimestamp(e.occurred_at), text: e.body })),
     meds: meds.map(m => ({
       id: m.id, name: m.name, dose: m.dose ?? '', route: m.route ?? 'PO', freq: m.freq ?? '',
       start: fmtDbDay(m.started), status: m.status as Med['status'],
@@ -255,9 +255,17 @@ export const useWardStore = defineStore('ward', () => {
       .select()
       .single()
     p.events.unshift({
+      id: ev?.id ?? '',
       date: ev ? fmtDbTimestamp(ev.occurred_at) : fmtDbTimestamp(occurred_at),
       text: text.trim(),
     })
+  }
+
+  async function removeEvent(bedId: number, eventId: string) {
+    const p = bedById.value(bedId)?.patient
+    if (!p) return
+    await supabase.from('events').delete().eq('id', eventId)
+    p.events = p.events.filter(e => e.id !== eventId)
   }
 
   async function addMed(bedId: number, draft: { name: string; dose: string; route: string; freq: string; startedOn?: string }) {
@@ -322,6 +330,6 @@ export const useWardStore = defineStore('ward', () => {
     beds, loading,
     bedById, occupiedCount,
     loadWard, admit, discharge, addBed, removeBed,
-    addEvent, addMed, medAction, toggleMedEdit, savePatient,
+    addEvent, removeEvent, addMed, medAction, toggleMedEdit, savePatient,
   }
 })

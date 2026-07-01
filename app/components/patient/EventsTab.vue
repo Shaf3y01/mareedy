@@ -29,9 +29,20 @@ function add() {
 
       <div v-if="patient.events.length === 0" class="empty-tab">{{ t('noEvents') }}</div>
       <div class="timeline">
-        <div v-for="(e, i) in patient.events" :key="i" class="ev">
+        <div v-for="(e, i) in patient.events" :key="e.id || i" class="ev">
           <div class="d">{{ e.date }}</div>
           <div class="t">{{ e.text }}</div>
+          <button
+            v-if="editing && i < patient.events.length - 1"
+            class="ev-del"
+            type="button"
+            title="Remove event"
+            @click="ward.removeEvent(bedId, e.id)"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="3 6 5 6 21 6" /><path d="M19 6l-1 14H6L5 6" /><path d="M10 11v6M14 11v6" /><path d="M9 6V4h6v2" />
+            </svg>
+          </button>
         </div>
       </div>
     </div>
